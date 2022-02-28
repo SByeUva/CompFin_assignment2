@@ -40,10 +40,10 @@ double standard_error(double arr[], int size)
         return sqrt(var)/sqrt(size);
     }
 
-char european_put(int T, double K, double r, double S, double sigma, int trials, bool error)
+void european_put(int T, double K, double r, double S, double sigma, int trials, bool error)
     // This computes the price of European put option 
     {
-        std::random_device rd{};      
+        std::random_device rd;      
         std::mt19937 gen{rd()};       
         double S_adjust = S * exp(T * (r-0.5*sigma*sigma));
         double payoff_array[trials];
