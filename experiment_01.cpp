@@ -11,11 +11,12 @@ Part I: Basic option valuation of put option
 T = 1, K = 99, r = 6, S = 100, sigma = 20
 
 Experiment 1: For the above numbers, what is option price?
-Experiment 2: Investigate the convergence by increasing N
-Experiment 3: Adjust K and sigma
-
+Experiment 2: Investigate the convergence by increasing number of trials 
+Experiment 3: Adjust strike price and sigma
 */
+
 double mean(double arr[], int size)
+    // This method calculates the mean of Monte-Carlo 
     {
         double sum;
         for (int i = 0; i < size; i++)
@@ -27,6 +28,7 @@ double mean(double arr[], int size)
     }
 
 double standard_error(double arr[], int size)
+    // This method computes the standard error of Monte-Carlo
     {
         double var = 0;
         double mu = mean(arr, size);
@@ -38,7 +40,8 @@ double standard_error(double arr[], int size)
         return sqrt(var)/sqrt(size);
     }
 
-double european_put(int T, double K, double r, double S, double sigma, int trials, bool error)
+char european_put(int T, double K, double r, double S, double sigma, int trials, bool error)
+    // This computes the price of European put option 
     {
         std::random_device rd{};      
         std::mt19937 gen{rd()};       
@@ -62,17 +65,11 @@ double european_put(int T, double K, double r, double S, double sigma, int trial
         {
         std::cout << "European call is valued at " << mean(payoff_array, trials) * exp(-r*T) << ", SE = " <<  standard_error(payoff_array, trials) << std::endl ; 
         }
-
     }
 
 int main()
 {
-    setvbuf(stdout, NULL, _IONBF, 0);
-    // Define random number generator
-    std::random_device rd{};
-    std::mt19937 gen{rd()};
- 
-    // Variables
+    // Initial variables
     int T = 1;
     double K = 99;
     float r = 0.06;
@@ -89,7 +86,6 @@ int main()
     european_put(T, K, r, S, sigma, trials, false);
 
     // Experiment 2:
-    /*
     std::cout << "\n\n";
     std::cout << "Experiment 2: Evaluate convergence" << std::endl;
 
@@ -97,19 +93,22 @@ int main()
     {
         european_put(T, K, r, S, sigma, i, true);
     }
-*/
     // Experiment 3:
-    std::cout <<"\n\n";
+    std::cout <<"\n";
     std::cout<< "Experiment 3: Evaluate difference in K and Sigma \n" << std::flush;
+    std::cout << "\nAdjust k\n";
     for(double k = 25; k <= 150; k = k + 25)
     {
-        std::cout << k << european_put(T, k, r, S, sigma, 100000, true);
+        std::cout << k ;
+        european_put(T, k, r, S, sigma, 100000, true);
     }
 
 
-    for(double i = 0.05; i <= 2; i = i + 0.05)
+    std::cout << "\n Adjust sigma \n";
+    for(double i = 0.05; i <= 1; i = i + 0.05)
     {
-        std::cout << i << european_put(T, K, r, S, i, 100000, true);
+        std::cout << i;
+        european_put(T, K, r, S, i, 100000, true);
     }
 
     return 0;
